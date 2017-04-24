@@ -48,6 +48,7 @@ const dns = require('dns');
 const tmp = require('tmp');
 const unpack = require('tar-pack').unpack;
 const hyperquest = require('hyperquest');
+const request = require('request-promise-native');
 
 const packageJson = require('./package.json');
 
@@ -545,9 +546,7 @@ function checkIfOnline(useYarn) {
     return Promise.resolve(true);
   }
 
-  return new Promise(resolve => {
-    dns.lookup('registry.yarnpkg.com', err => {
-      resolve(err === null);
-    });
-  });
+  const yarnRegistry = execSync('yarn config get registry').toString().trim();
+
+  return request(yarnRegistry);
 }
