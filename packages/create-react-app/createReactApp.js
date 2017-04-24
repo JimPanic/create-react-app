@@ -548,5 +548,5 @@ function checkIfOnline(useYarn) {
 
   const yarnRegistry = execSync('yarn config get registry').toString().trim();
 
-  return request(yarnRegistry);
+  return request(yarnRegistry).catch(() => false);
 }
