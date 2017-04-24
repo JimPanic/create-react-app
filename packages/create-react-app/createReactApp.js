@@ -44,7 +44,6 @@ const path = require('path');
 const execSync = require('child_process').execSync;
 const spawn = require('cross-spawn');
 const semver = require('semver');
-const dns = require('dns');
 const tmp = require('tmp');
 const unpack = require('tar-pack').unpack;
 const hyperquest = require('hyperquest');
