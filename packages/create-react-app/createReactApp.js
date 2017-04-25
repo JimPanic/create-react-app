@@ -47,7 +47,6 @@ const semver = require('semver');
 const tmp = require('tmp');
 const unpack = require('tar-pack').unpack;
 const hyperquest = require('hyperquest');
-const request = require('request-promise-native');
 
 const packageJson = require('./package.json');
 
@@ -545,7 +544,12 @@ function checkIfOnline(useYarn) {
     return Promise.resolve(true);
   }
 
-  const yarnRegistry = execSync('yarn config get registry').toString().trim();
+  return new Promise((resolve, reject) => {
+    const yarnRegistry = execSync('yarn config get registry').toString().trim();
+    const registryStream = hyperquest(yarnRegistry);
 
-  return request(yarnRegistry).catch(() => false);
+    registryStream.on('error', reject);
+    registryStream.on('data', () => {});
+    registryStream.on('end', () => resolve(true));
+  });
 }
